@@ -1,5 +1,5 @@
 {
-  "address": "AsjZ3kWAUSQRNt2pZVeJkywhZ6gpLpHZmJjduPmKZDZZ",
+  "address": "9Haw7CtchWgJA9AJkWRdVegganiRwMResXq5yFa3uWs7",
   "metadata": {
     "name": "voting",
     "version": "0.1.0",
@@ -44,7 +44,19 @@
       ],
       "args": [
         {
-          "name": "_poll_id",
+          "name": "poll_id",
+          "type": "u64"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "poll_start",
+          "type": "u64"
+        },
+        {
+          "name": "poll_end",
           "type": "u64"
         }
       ]
