@@ -4,6 +4,7 @@ import { Counter } from "../target/types/counter";
 import { Voting } from "../target/types/voting";
 import { BankrunProvider, startAnchor } from "anchor-bankrun";
 import { Keypair, PublicKey } from "@solana/web3.js";
+import exp from "constants";
 
 const IDL = require("../target/idl/voting.json");
 
@@ -39,6 +40,10 @@ describe("Voting", () => {
       const poll = await votingProgram.account.poll.fetch(pollAddress);
 
       console.log(poll);
+
+      expect(poll.pollId.toNumber()).toBe(1);
+      expect(poll.description).toBe("What is your favorite candidate?");
+      expect(poll.pollStart.toNumber()).toBeLessThan(poll.pollEnd.toNumber());
 
   });
 });
