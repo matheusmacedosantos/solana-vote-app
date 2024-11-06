@@ -81,7 +81,7 @@ pub struct InitializeCandidate<'info> {
     #[account(
         init,
         payer = signer,
-        space = 8 + 32 + 8, // espaço para Candidate: 8 bytes para discriminator + 32 bytes para o nome + 8 bytes para votos
+        space = 8 + 32 + 8,
         seeds = [poll_id.to_le_bytes().as_ref(), candidate_name.as_bytes()],
         bump,
     )]
@@ -92,7 +92,7 @@ pub struct InitializeCandidate<'info> {
 
 #[account]
 pub struct Candidate {
-    pub candidate_name: String, // Considerar definir um tamanho fixo (32 bytes) em vez de usar String diretamente
+    pub candidate_name: String, 
     pub candidate_votes: u64,
 }
 
@@ -105,7 +105,7 @@ pub struct InitializePoll<'info> {
     #[account(
         init,
         payer = signer,
-        space = 8 + 8 + 4 + 280 + 8 + 8 + 8, // espaço para Poll: discriminator + campos
+        space = 8 + 8 + 4 + 280 + 8 + 8 + 8, 
         seeds = [poll_id.to_le_bytes().as_ref()],
         bump,
     )]
@@ -117,7 +117,7 @@ pub struct InitializePoll<'info> {
 #[account]
 pub struct Poll {
     pub poll_id: u64,
-    pub description: String, // Definir tamanho fixo no espaço (280 bytes)
+    pub description: String, 
     pub poll_start: u64,
     pub poll_end: u64,
     pub candidate_amount: u64,
