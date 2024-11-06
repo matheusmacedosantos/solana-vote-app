@@ -13,16 +13,22 @@ const votingAddress = new PublicKey(
 );
 
 describe("Voting", () => {
-  it("Initialize Poll", async () => {
-    const context = await startAnchor(
+  let context;
+  let provider;
+  let votingProgram: anchor.Program<Voting>;
+
+  beforeAll(async () => {
+    context = await startAnchor(
       "",
       [{ name: "voting", programId: votingAddress }],
       []
     );
-    const provider = new BankrunProvider(context);
+    provider = new BankrunProvider(context);
 
-    const votingProgram = new Program<Voting>(IDL, provider);
+    votingProgram = new Program<Voting>(IDL, provider);
+  });
 
+  it("Initialize Poll", async () => {
     await votingProgram.methods
       .initializePoll(
         new anchor.BN(1),
@@ -32,18 +38,64 @@ describe("Voting", () => {
       )
       .rpc();
 
-      const [pollAddress] = PublicKey.findProgramAddressSync(
-        [new anchor.BN(1).toArrayLike(Buffer, "le", 8)],
-        votingAddress
-      );
+    const [pollAddress] = PublicKey.findProgramAddressSync(
+      [new anchor.BN(1).toArrayLike(Buffer, "le", 8)],
+      votingAddress
+    );
 
-      const poll = await votingProgram.account.poll.fetch(pollAddress);
+    const poll = await votingProgram.account.poll.fetch(pollAddress);
 
-      console.log(poll);
+    console.log(poll);
 
-      expect(poll.pollId.toNumber()).toBe(1);
-      expect(poll.description).toBe("What is your favorite candidate?");
-      expect(poll.pollStart.toNumber()).toBeLessThan(poll.pollEnd.toNumber());
+    expect(poll.pollId.toNumber()).toBe(1);
+    expect(poll.description).toBe("What is your favorite candidate?");
+    expect(poll.pollStart.toNumber()).toBeLessThan(poll.pollEnd.toNumber());
+  });
 
+  it("initialize candidate", async () => {
+    await votingProgram.methods
+      .initializeCandidate("DJ Trump", new anchor.BN(1))
+      .rpc();
+    await votingProgram.methods
+      .initializeCandidate("Kamala Harrys", new anchor.BN(1))
+      .rpc();
+
+    const [kamalaAddress] = PublicKey.findProgramAddressSync(
+      [
+        new anchor.BN(1).toArrayLike(Buffer, "le", 8),
+        Buffer.from("Kamala Harrys"),
+      ],
+      votingAddress
+    );
+    const kamalaCandidate = await votingProgram.account.candidate.fetch(
+      kamalaAddress
+    );
+    console.log(kamalaCandidate);
+
+    expect(kamalaCandidate.candidateVotes.toNumber()).toEqual(0);
+
+    const [trumpAddress] = PublicKey.findProgramAddressSync(
+      [new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("DJ Trump")],
+      votingAddress
+    );
+    const trumpCandidate = await votingProgram.account.candidate.fetch(
+      trumpAddress
+    );
+    console.log(trumpCandidate);
+    expect(trumpCandidate.candidateVotes.toNumber()).toEqual(0);
+  });
+
+  it("vote", async () => {
+    await votingProgram.methods.vote("DJ Trump", new anchor.BN(1)).rpc();
+
+    const [trumpAddress] = PublicKey.findProgramAddressSync(
+      [new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("DJ Trump")],
+      votingAddress
+    );
+    const trumpCandidate = await votingProgram.account.candidate.fetch(
+      trumpAddress
+    );
+    console.log(trumpCandidate);
+    expect(trumpCandidate.candidateVotes.toNumber()).toEqual(1);
   });
 });
