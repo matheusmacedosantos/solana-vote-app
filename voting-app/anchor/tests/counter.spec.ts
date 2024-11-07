@@ -54,17 +54,14 @@ describe("Voting", () => {
 
   it("initialize candidate", async () => {
     await votingProgram.methods
-      .initializeCandidate("DJ Trump", new anchor.BN(1))
+      .initializeCandidate("trump", new anchor.BN(1))
       .rpc();
     await votingProgram.methods
-      .initializeCandidate("Kamala Harrys", new anchor.BN(1))
+      .initializeCandidate("kamala", new anchor.BN(1))
       .rpc();
 
     const [kamalaAddress] = PublicKey.findProgramAddressSync(
-      [
-        new anchor.BN(1).toArrayLike(Buffer, "le", 8),
-        Buffer.from("Kamala Harrys"),
-      ],
+      [new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("kamala")],
       votingAddress
     );
     const kamalaCandidate = await votingProgram.account.candidate.fetch(
@@ -75,7 +72,7 @@ describe("Voting", () => {
     expect(kamalaCandidate.candidateVotes.toNumber()).toEqual(0);
 
     const [trumpAddress] = PublicKey.findProgramAddressSync(
-      [new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("DJ Trump")],
+      [new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("trump")],
       votingAddress
     );
     const trumpCandidate = await votingProgram.account.candidate.fetch(
@@ -86,10 +83,10 @@ describe("Voting", () => {
   });
 
   it("vote", async () => {
-    await votingProgram.methods.vote("DJ Trump", new anchor.BN(1)).rpc();
+    await votingProgram.methods.vote("trump", new anchor.BN(1)).rpc();
 
     const [trumpAddress] = PublicKey.findProgramAddressSync(
-      [new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("DJ Trump")],
+      [new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("trump")],
       votingAddress
     );
     const trumpCandidate = await votingProgram.account.candidate.fetch(
