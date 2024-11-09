@@ -9,23 +9,23 @@ import exp from "constants";
 const IDL = require("../target/idl/voting.json");
 
 const votingAddress = new PublicKey(
-  "AsjZ3kWAUSQRNt2pZVeJkywhZ6gpLpHZmJjduPmKZDZZ"
+  "9Haw7CtchWgJA9AJkWRdVegganiRwMResXq5yFa3uWs7"
 );
 
 describe("Voting", () => {
   let context;
   let provider;
-  let votingProgram: anchor.Program<Voting>;
+  anchor.setProvider(anchor.AnchorProvider.env());
+  let votingProgram = anchor.workspace.Voting as Program<Voting>;
 
   beforeAll(async () => {
-    context = await startAnchor(
-      "",
-      [{ name: "voting", programId: votingAddress }],
-      []
-    );
-    provider = new BankrunProvider(context);
-
-    votingProgram = new Program<Voting>(IDL, provider);
+    // context = await startAnchor(
+    //   "",
+    //   [{ name: "voting", programId: votingAddress }],
+    //   []
+    // );
+    // provider = new BankrunProvider(context);
+    // votingProgram = new Program<Voting>(IDL, provider);
   });
 
   it("Initialize Poll", async () => {

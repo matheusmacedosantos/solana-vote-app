@@ -11,6 +11,7 @@ import { BN, Program } from "@coral-xyz/anchor";
 const IDL = require("../../../../anchor/target/idl/voting.json");
 
 export const OPTIONS = GET;
+``;
 
 export async function GET(request: Request) {
   const actionMetadata: ActionGetResponse = {
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const connection = new Connection("http://127.0.0.1::8999", "confirmed");
+  const connection = new Connection("http://127.0.0.1:8899", "confirmed");
   const program: Program<Voting> = new Program(IDL, { connection });
   const body: ActionPostRequest = await request.json();
   let voter;
