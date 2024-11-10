@@ -78,6 +78,7 @@ export async function POST(request: Request) {
 
   const response = await createPostResponse({
     fields: {
+      type: "transaction",
       transaction: transaction,
     },
   });

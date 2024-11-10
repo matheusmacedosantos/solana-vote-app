@@ -1,11 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { Counter } from "../target/types/counter";
 import { Voting } from "../target/types/voting";
-import { BankrunProvider, startAnchor } from "anchor-bankrun";
-import { Keypair, PublicKey } from "@solana/web3.js";
-import exp from "constants";
-
+import { PublicKey } from "@solana/web3.js";
 const IDL = require("../target/idl/voting.json");
 
 const votingAddress = new PublicKey(
