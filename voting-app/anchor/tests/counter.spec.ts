@@ -5,7 +5,7 @@ import { PublicKey } from "@solana/web3.js";
 const IDL = require("../target/idl/voting.json");
 
 const votingAddress = new PublicKey(
-  "9Haw7CtchWgJA9AJkWRdVegganiRwMResXq5yFa3uWs7"
+  "772mFx4PDHfR8MAzddxVm68nwRkn7YSc1NAFsRvaEt6s"
 );
 
 describe("Voting", () => {
